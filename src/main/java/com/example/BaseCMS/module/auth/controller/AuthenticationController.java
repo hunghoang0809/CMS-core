@@ -1,6 +1,7 @@
 package com.example.BaseCMS.module.auth.controller;
 
 
+import com.example.BaseCMS.common.ApiResponse;
 import com.example.BaseCMS.module.auth.dto.AuthenticationResponse;
 import com.example.BaseCMS.module.auth.dto.AuthenticationRequest;
 import com.example.BaseCMS.module.auth.service.AuthenticationService;
@@ -19,8 +20,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(
+    public ResponseEntity<?> login(
             @RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(new ApiResponse<>(200, "Success",authenticationService.authenticate(request)));
     }
 }
