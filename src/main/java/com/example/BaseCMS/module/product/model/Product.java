@@ -21,7 +21,6 @@ import java.util.List;
 @Builder
 public class Product extends BaseEntity {
     private String name;
-    private Long categoryId;
     private Long price;
     private String description;
     private String shortDescription;
