@@ -21,6 +21,11 @@ spring:
   security:
     enabled: true
 
+  servlet:
+        multipart:
+          max-file-size: 2MB
+          max-request-size: 2MB
+
 springdoc:
   api-docs:
     enabled: true
@@ -30,6 +35,9 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
   auto-tag-classes: true
+
+base:
+    url: ${BASE_URL:http://http://160.191.244.248:8000}
 
 
 
