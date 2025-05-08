@@ -13,5 +13,4 @@ public class ProductDto {
     private Long price;
     private Long discountPrice;
     private String shortDescription;
-    private List<Long> categoryId;
  }

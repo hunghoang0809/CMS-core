@@ -1,5 +1,10 @@
 package com.example.BaseCMS.module.product.rq;
 
-public class ProductFilterRq {
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
+public class ProductFilterRq {
+    private long categoryId;
 }

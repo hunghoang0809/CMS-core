@@ -5,7 +5,7 @@ import com.example.BaseCMS.module.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +22,11 @@ public class ProductController {
     @GetMapping("/")
     public ResponseEntity<?> getAllProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "categoryId", required = false) Long categoryId
+            ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        return new ResponseEntity<>(
-                new ApiResponse<>(200, "Success", productService.list(pageable)), HttpStatusCode.valueOf(200));
+        return  ResponseEntity.ok(
+                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categoryId)));
     }
 }
