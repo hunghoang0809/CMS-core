@@ -50,6 +50,7 @@ public class AdminProductController {
             @RequestParam(value = "categoryId", required = false) Long categoryId){
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
+        System.out.println(categoryId);
         return  ResponseEntity.ok(
                 new ApiResponse<>(200, "Success", productService.list(pageable, categoryId)));
     }

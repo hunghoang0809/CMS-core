@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p " +
             "LEFT JOIN CategoryProduct cp on cp.productId = p.id "+
-            "WHERE (cp.categoryId IS NULL OR cp.categoryId = :categoryId) " )
+            "WHERE (:categoryId IS NULL OR cp.categoryId = :categoryId) " )
     Page<Product> findAllProduct(Pageable pageable, Long categoryId);
 
 
@@ -25,7 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             JOIN Category c2 ON c2.id = cp2.categoryId
             WHERE c2.parentId IS NOT NULL
         ))
-        AND (cp.categoryId IS NULL OR cp.categoryId = :categoryId)
+        AND (:categoryId IS NULL OR cp.categoryId = :categoryId)
     )
     ORDER BY
      CASE

@@ -11,4 +11,6 @@ public class ListProductDto {
     private String name;
     private String shortDescription;
     private String imageUrl;
+    private Long categoryId;
+    private String categoryName;
 }
