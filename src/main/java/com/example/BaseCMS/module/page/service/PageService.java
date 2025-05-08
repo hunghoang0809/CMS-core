@@ -43,11 +43,15 @@ public class PageService {
     }
 
     private PageDto convertToDto(Page page) {
-        User user = userRepository.findById(page.getAuthorId()).orElseThrow(() -> new GenericErrorException("Không tìm thấy người dùng với id " + page.getAuthorId(), HttpStatus.NOT_FOUND));
-        Category category = categoryRepository.findById(page.getCategoryId()).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + page.getCategoryId(), HttpStatus.NOT_FOUND));
         PageDto pageDto = modelMapper.map(page, PageDto.class);
-        pageDto.setAuthorName(user.getUsername());
-        pageDto.setCategoryName(category.getName());
+        User user = userRepository.findById(page.getAuthorId()).orElse(null);
+        if(user!= null){
+            pageDto.setAuthorName(user.getUsername());
+        }
+        Category category = categoryRepository.findById(page.getCategoryId()).orElse(null);
+        if(category != null){
+            pageDto.setCategoryId(category.getId());
+        }
         return pageDto;
     }
 
