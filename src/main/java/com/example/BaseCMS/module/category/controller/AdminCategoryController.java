@@ -16,13 +16,13 @@ public class AdminCategoryController {
     private final CategoryService categoryService;
 
     @Operation(summary = "Create category")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createCategory(@RequestBody() CreateCategoryRq rq) {
         return ResponseEntity.ok(new ApiResponse<>(200, "Success", categoryService.createCategory(rq)));
     }
 
     @Operation(summary = "Get all categories")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllCategories(
             @RequestParam(value = "page", defaultValue = "0") int page
             , @RequestParam(value = "size", defaultValue = "10") int size

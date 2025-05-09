@@ -49,6 +49,8 @@ public class ProductService  {
 
     @Transactional
     public void createCategoryProduct(CreateProductRq rq, Product product) {
+
+        
         for (Long categoryId : rq.getCategoryId()) {
 
             Category category = categoryRepository.findById(categoryId)
@@ -104,8 +106,7 @@ public class ProductService  {
 
     public Page<ProductDto> getAllProduct(Pageable pageable, Long categoryId) {
         Page<Product> products = productRepository.findProduct(pageable, categoryId);
-        Page<ProductDto> productDtos = products.map(this::convertToDto);
-        return productDtos;
+        return products.map(this::convertToDto);
     }
 
     public ProductDto convertToDto (Product product) {

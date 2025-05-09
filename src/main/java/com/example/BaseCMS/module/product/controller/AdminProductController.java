@@ -18,7 +18,7 @@ public class AdminProductController {
     private final ProductService productService;
 
     @Operation(summary = "Create product")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> addProduct(@RequestBody()CreateProductRq rq) {
         productService.create(rq);
         return  ResponseEntity.ok(
@@ -43,7 +43,7 @@ public class AdminProductController {
     }
 
     @Operation(summary = "Get all products")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,

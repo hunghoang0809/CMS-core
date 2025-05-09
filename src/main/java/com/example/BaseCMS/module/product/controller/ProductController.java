@@ -19,7 +19,7 @@ public class ProductController {
     private final ProductService productService;
 
     @Operation(summary = "Get all products")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,

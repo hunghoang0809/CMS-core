@@ -16,12 +16,12 @@ public class AdminUserController {
     private final UserService userService;
 
     @Operation(summary = "Create a new user")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createUser(@RequestBody UserRq userRq) {
         return ResponseEntity.ok(new ApiResponse<>(200, "Success", userService.create(userRq)));
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size

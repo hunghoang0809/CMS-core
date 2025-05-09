@@ -18,7 +18,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Operation(summary = "Get all categories")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllCategories() {
         return  ResponseEntity.ok(new ApiResponse<>(200, "Success", categoryService.getAllGroupByParentId()));
     }
