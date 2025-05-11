@@ -136,7 +136,7 @@ public class ProductService  {
     }
 
     public List<ListProductDto> getAll(Pageable pageable) {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllParentCategory();
         List<ListProductDto> listProductDtos = categories.stream()
                 .map(category -> {
                     Page<Product> products = productRepository.findProductByCategoryId(category.getId(), pageable);
