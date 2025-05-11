@@ -22,7 +22,7 @@ public class AdminPageController {
     private final PageService pageService;
 
     @Operation(summary = "Create page")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createPage(@RequestBody()PageRequest pageRq) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
@@ -32,7 +32,7 @@ public class AdminPageController {
     }
 
     @Operation(summary = "List pages")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> listPages(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -53,5 +53,13 @@ public class AdminPageController {
         pageService.updatePage(id, pageRq);
         return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
     }
+
+    @Operation(summary = "Delete page")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePage(@PathVariable Long id) {
+        pageService.deletePage(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
+    }
+
 
 }
