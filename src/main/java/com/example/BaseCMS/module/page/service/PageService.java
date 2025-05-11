@@ -67,4 +67,12 @@ public class PageService {
         page.setContent(pageRq.getContent());
         page.setStatus(pageRq.getStatus());
     }
+
+    public void deletePage(long id){
+        Page page = pageRepository.findById(id).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với id " + id, HttpStatus.NOT_FOUND));
+        pageRepository.delete(page);
+    }
+    public Page getPageBySlug(String slug) {
+        return pageRepository.findBySlug(slug).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với slug " + slug, HttpStatus.NOT_FOUND));
+    }
 }

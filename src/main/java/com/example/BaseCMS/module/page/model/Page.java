@@ -1,3 +1,4 @@
+
 package com.example.BaseCMS.module.page.model;
 
 import com.example.BaseCMS.common.BaseEntity;
@@ -24,5 +25,6 @@ public class Page extends BaseEntity {
     private PageEnum status;
     private long categoryId;
     private String imageUrl;
+    private String slug;
     private String shortDescription;
 }
