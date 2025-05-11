@@ -18,9 +18,7 @@ public class ProductController {
     @Operation(summary = "Get all products grouped by category")
     @GetMapping("/grouped-by-category")
     public ResponseEntity<?> getAllProducts(
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            @RequestParam(value = "brandId", required = false) Long brandId
+            @RequestParam(value = "size", defaultValue = "10") int size
             ) {
         Pageable pageable = Pageable.ofSize(size).withPage(0);
         return  ResponseEntity.ok(
