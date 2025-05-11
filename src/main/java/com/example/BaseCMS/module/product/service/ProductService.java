@@ -29,6 +29,7 @@ public class ProductService  {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
+
     @Transactional
     public void create(CreateProductRq rq) {
 
@@ -50,7 +51,7 @@ public class ProductService  {
     @Transactional
     public void createCategoryProduct(CreateProductRq rq, Product product) {
 
-        
+
         for (Long categoryId : rq.getCategoryId()) {
 
             Category category = categoryRepository.findById(categoryId)
@@ -104,8 +105,8 @@ public class ProductService  {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Page<ProductDto> getAllProduct(Pageable pageable, Long categoryId) {
-        Page<Product> products = productRepository.findProduct(pageable, categoryId);
+    public Page<ProductDto> getAllProduct(Pageable pageable, Long categoryId, Long brandId) {
+        Page<Product> products = productRepository.findProduct(pageable, categoryId, brandId);
         return products.map(this::convertToDto);
     }
 
@@ -124,6 +125,25 @@ public class ProductService  {
                     .toList());
         }
         return productDto;
+    }
+
+    public Product getProductBySlug(String slug) {
+        Product product = productRepository.findBySlug(slug);
+        if (product == null) {
+            throw new GenericErrorException("Không tìm thấy sản phẩm với slug " + slug, HttpStatus.NOT_FOUND);
+        }
+        return product;
+    }
+
+    public List<ListProductDto> getAll(Pageable pageable) {
+        List<Category> categories = categoryRepository.findAll();
+        List<ListProductDto> listProductDtos = categories.stream()
+                .map(category -> {
+                    Page<Product> products = productRepository.findProductByCategoryId(category.getId(), pageable);
+                    return new ListProductDto(products, category.getName(), category.getId());
+                })
+                .toList();
+        return listProductDtos;
     }
 
 

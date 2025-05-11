@@ -28,4 +28,10 @@ public class CategoryController {
     public ResponseEntity<?> getSubCategories(@PathVariable("parent-id") Long parentId) {
         return  ResponseEntity.ok(new ApiResponse<>(200, "Success", categoryService.getSubCategoriesByParentId(parentId)));
     }
+
+    @Operation(summary = "Get category by slug")
+    @GetMapping("/{slug}")
+    public ResponseEntity<?> getCategoryBySlug(@PathVariable("slug") String slug) {
+        return  ResponseEntity.ok(new ApiResponse<>(200, "Success", categoryService.getCategoryBySlug(slug)));
+    }
 }

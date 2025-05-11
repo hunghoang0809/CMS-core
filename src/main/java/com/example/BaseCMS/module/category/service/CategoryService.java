@@ -63,6 +63,10 @@ public class CategoryService {
         return categoryRepository.findAll(pageable);
     }
 
+    public Category getCategoryBySlug(String slug) {
+        return categoryRepository.findBySlug(slug).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với slug " + slug, HttpStatus.NOT_FOUND));
+    }
+
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + id, HttpStatus.NOT_FOUND));
     }
