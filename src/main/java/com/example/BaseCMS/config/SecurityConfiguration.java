@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/admin/**").authenticated()
+                        .requestMatchers("/api/v1/admin/**","api/v1/auth/me").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session

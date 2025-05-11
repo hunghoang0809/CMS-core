@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +29,8 @@ public class PageService {
                 .status(pageRq.getStatus())
                 .authorId(userId)
                 .categoryId(pageRq.getCategoryId())
+                .imageUrl(pageRq.getImgUrl())
+                .shortDescription(pageRq.getShortDescription())
                 .build();
 
         pageRepository.save(page);

@@ -48,4 +48,9 @@ public class UserService implements UserDetailsService {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(user -> modelMapper.map(user, UserResponse.class));
     }
+
+    public UserResponse getById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với id " + id));
+        return modelMapper.map(user, UserResponse.class);
+    }
 }

@@ -13,5 +13,7 @@ public class PageRequest {
     private String title;
     private String content;
     private PageEnum status;
+    private String imgUrl;
+    private String shortDescription;
     private Long categoryId;
 }

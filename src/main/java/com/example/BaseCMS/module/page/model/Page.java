@@ -8,8 +8,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.lang.reflect.Type;
-
 
 @Entity
 @Table(name = "page")
@@ -25,4 +23,6 @@ public class Page extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private PageEnum status;
     private long categoryId;
+    private String imageUrl;
+    private String shortDescription;
 }
