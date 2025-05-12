@@ -37,7 +37,7 @@ springdoc:
   auto-tag-classes: true
 
 base:
-    url: ${BASE_URL:http://http://160.191.244.248:8000}
+    url: ${BASE_URL:http://160.191.244.248:8000}
 
 
 
