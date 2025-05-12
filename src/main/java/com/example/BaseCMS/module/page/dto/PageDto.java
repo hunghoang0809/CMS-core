@@ -12,6 +12,9 @@ public class PageDto {
     private Long id;
     private String title;
     private String content;
+    private String imgUrl;
+    private String shortDescription;
+    private String slug;
     private PageEnum status;
     private Long authorId;
     private String authorName;
