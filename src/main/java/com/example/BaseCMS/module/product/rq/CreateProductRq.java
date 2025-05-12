@@ -21,4 +21,6 @@ public class CreateProductRq {
     private Long price;
     private String imageUrl;
     private Long discountPrice;
+    @NotEmpty(message = "Slug không được để trống")
+    private String slug;
 }

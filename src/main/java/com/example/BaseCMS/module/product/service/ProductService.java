@@ -40,6 +40,7 @@ public class ProductService  {
                 .shortDescription(rq.getShortDescription())
                 .imageUrl(rq.getImageUrl())
                 .discountPrice(rq.getDiscountPrice())
+                .slug(rq.getSlug())
                 .build();
         productRepository.save(product);
 
