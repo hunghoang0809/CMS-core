@@ -31,6 +31,7 @@ public class PageService {
                 .categoryId(pageRq.getCategoryId())
                 .imageUrl(pageRq.getImgUrl())
                 .shortDescription(pageRq.getShortDescription())
+                .slug(pageRq.getSlug())
                 .build();
 
         pageRepository.save(page);
