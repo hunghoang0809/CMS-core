@@ -50,9 +50,11 @@ public class PageService {
         if(user!= null){
             pageDto.setAuthorName(user.getUsername());
         }
-        Category category = categoryRepository.findById(page.getCategoryId()).orElse(null);
-        if(category != null){
-            pageDto.setCategoryId(category.getId());
+        if(page.getCategoryId() != null){
+            Category category = categoryRepository.findById(page.getCategoryId()).orElse(null);
+            if(category != null){
+                pageDto.setCategoryName(category.getName());
+            }
         }
         return pageDto;
     }
