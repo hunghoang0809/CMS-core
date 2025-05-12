@@ -32,7 +32,7 @@ public class StorageController {
 
         String fileId = storageService.uploadImageToFileSystem(file);
 
-        String viewUrl = baseUrl + "/v1/file-storage/view/" + fileId;
+        String viewUrl = baseUrl + "api/v1/file-storage/view/" + fileId;
 
         ApiResponse<String> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
