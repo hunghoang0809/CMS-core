@@ -30,12 +30,12 @@ public class ProductController {
     public ResponseEntity<?> getAllProducts(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "categoryId", required = false) Long categoryId,
-            @RequestParam(value = "brandId", required = false) Long brandId
+            @RequestParam(value = "categorySlug", required = false) String categorySlug,
+            @RequestParam(value = "brandSlug", required = false) String brandSlug
             ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return  ResponseEntity.ok(
-                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categoryId, brandId)));
+                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categorySlug, brandSlug)));
     }
 
     @Operation(summary = "Get product by slug")

@@ -5,8 +5,10 @@ import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.category.repo.CategoryRepository;
 import com.example.BaseCMS.module.product.dto.ListProductDto;
 import com.example.BaseCMS.module.product.dto.ProductDto;
+import com.example.BaseCMS.module.product.model.Brand;
 import com.example.BaseCMS.module.product.model.CategoryProduct;
 import com.example.BaseCMS.module.product.model.Product;
+import com.example.BaseCMS.module.product.repo.BrandRepository;
 import com.example.BaseCMS.module.product.repo.CategoryProductRepository;
 import com.example.BaseCMS.module.product.repo.ProductRepository;
 import com.example.BaseCMS.module.product.rq.CreateProductRq;
@@ -28,6 +30,7 @@ public class ProductService  {
     private final CategoryProductRepository categoryProductRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
+    private final BrandRepository brandRepository;
 
 
     @Transactional
@@ -106,8 +109,19 @@ public class ProductService  {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Page<ProductDto> getAllProduct(Pageable pageable, Long categoryId, Long brandId) {
-        Page<Product> products = productRepository.findProduct(pageable, categoryId, brandId);
+    public Page<ProductDto> getAllProduct(Pageable pageable, String categorySlug, String brandSlug) {
+        Long categoryId = null;
+        Long brandId = null;
+        if (categorySlug != null) {
+            Category category = categoryRepository.findBySlug(categorySlug).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với slug " + categorySlug, HttpStatus.NOT_FOUND));
+            categoryId = category.getId();
+        }
+        if (brandSlug != null) {
+            Brand brand = brandRepository.getBySlug(brandSlug).orElseThrow(() -> new GenericErrorException("Không tìm thấy thương hiệu với slug " + brandSlug, HttpStatus.NOT_FOUND));
+            brandId = brand.getId();
+
+        }
+        Page<Product> products = productRepository.findProduct(pageable, categoryId , brandId);
         return products.map(this::convertToDto);
     }
 
