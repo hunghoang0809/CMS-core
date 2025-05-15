@@ -20,7 +20,7 @@ public class PageController {
              @RequestParam(value = "size", defaultValue = "10") int size) {
          Pageable pageable = Pageable.ofSize(size).withPage(page);
          return  ResponseEntity.ok(
-                 new ApiResponse<>(200, "Success", pageService.getAllPage(pageable)));
+                 new ApiResponse<>(200, "Success", pageService.getAllPublishedPage(pageable)));
      }
 
      @Operation(summary = "Get page by id")

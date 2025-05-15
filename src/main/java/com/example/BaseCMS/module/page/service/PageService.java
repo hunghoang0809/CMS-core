@@ -3,6 +3,7 @@ package com.example.BaseCMS.module.page.service;
 import com.example.BaseCMS.exc.GenericErrorException;
 import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.category.repo.CategoryRepository;
+import com.example.BaseCMS.module.page.PageEnum;
 import com.example.BaseCMS.module.page.dto.PageDto;
 import com.example.BaseCMS.module.page.model.Page;
 import com.example.BaseCMS.module.page.repo.PageRepository;
@@ -63,6 +64,11 @@ public class PageService {
 
     public org.springframework.data.domain.Page<PageDto> getAllPage(org.springframework.data.domain.Pageable pageable) {
         org.springframework.data.domain.Page<Page> pages = pageRepository.findAll(pageable);
+        return pages.map(this::convertToDto);
+    }
+
+    public org.springframework.data.domain.Page<PageDto> getAllPublishedPage(org.springframework.data.domain.Pageable pageable) {
+        org.springframework.data.domain.Page<Page> pages = pageRepository.findAllByStatus(PageEnum.PUBLISHED, pageable);
         return pages.map(this::convertToDto);
     }
 
