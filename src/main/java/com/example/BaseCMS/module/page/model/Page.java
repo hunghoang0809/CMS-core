@@ -27,4 +27,6 @@ public class Page extends BaseEntity {
     private String imageUrl;
     private String slug;
     private String shortDescription;
+    private String seoTitle;
+    private String seoDescription;
 }

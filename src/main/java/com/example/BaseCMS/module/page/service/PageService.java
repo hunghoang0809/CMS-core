@@ -32,6 +32,8 @@ public class PageService {
                 .imageUrl(pageRq.getImgUrl())
                 .shortDescription(pageRq.getShortDescription())
                 .slug(pageRq.getSlug())
+                .seoTitle(pageRq.getSeoTitle())
+                .seoDescription(pageRq.getSeoDescription())
                 .build();
 
         pageRepository.save(page);
@@ -68,7 +70,14 @@ public class PageService {
         Page page = pageRepository.findById(id).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với id " + id, HttpStatus.NOT_FOUND));
         page.setTitle(pageRq.getTitle());
         page.setContent(pageRq.getContent());
+        page.setImageUrl(pageRq.getImgUrl());
+        page.setShortDescription(pageRq.getShortDescription());
+        page.setSlug(pageRq.getSlug());
+        page.setSeoTitle(pageRq.getSeoTitle());
+        page.setSeoDescription(pageRq.getSeoDescription());
+        page.setCategoryId(pageRq.getCategoryId());
         page.setStatus(pageRq.getStatus());
+        pageRepository.save(page);
     }
 
     public void deletePage(long id){

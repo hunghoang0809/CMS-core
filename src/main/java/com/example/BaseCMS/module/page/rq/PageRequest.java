@@ -22,4 +22,6 @@ public class PageRequest {
     private Long categoryId;
     @NotEmpty(message = "Slug không được để trống")
     private String slug;
+    private String seoTitle;
+    private String seoDescription;
 }

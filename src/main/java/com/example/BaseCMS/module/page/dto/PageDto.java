@@ -19,6 +19,8 @@ public class PageDto {
     private Long authorId;
     private String authorName;
     private Long categoryId;
+    private String seoTitle;
+    private String seoDescription;
     private String categoryName;
     private String createdAt;
     private String updatedAt;

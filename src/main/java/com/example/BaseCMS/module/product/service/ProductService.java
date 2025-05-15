@@ -43,6 +43,8 @@ public class ProductService  {
                 .shortDescription(rq.getShortDescription())
                 .imageUrl(rq.getImageUrl())
                 .discountPrice(rq.getDiscountPrice())
+                .seoTitle(rq.getSeoTitle())
+                .seoDescription(rq.getSeoDescription())
                 .slug(rq.getSlug())
                 .build();
         productRepository.save(product);
@@ -92,6 +94,9 @@ public class ProductService  {
         product.setImageUrl(rq.getImageUrl());
         product.setDiscountPrice(rq.getDiscountPrice());
        product.setDescription(rq.getDescription());
+        product.setSlug(rq.getSlug());
+        product.setSeoTitle(rq.getSeoTitle());
+        product.setSeoDescription(rq.getSeoDescription());
         productRepository.save(product);
     }
 

@@ -15,4 +15,6 @@ public class ProductDto {
     private String shortDescription;
     private List<Long> categoryIds;
     private List<String> categoryNames;
+    private String seoTitle;
+    private String seoDescription;
  }
