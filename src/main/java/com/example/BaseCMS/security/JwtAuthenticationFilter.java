@@ -71,3 +71,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getWriter().write("{\"error\": \"Invalid JWT: " + ex.getMessage() + "\"}");
         }
     }
+}
