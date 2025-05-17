@@ -1,5 +1,6 @@
 package com.example.BaseCMS.security;
 
+import com.example.BaseCMS.exc.GenericErrorException;
 import com.example.BaseCMS.module.auth.service.JwtService;
 import com.example.BaseCMS.module.user.repo.UserRepository;
 import com.example.BaseCMS.module.user.service.CustomUserDetails;
@@ -8,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,13 +64,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"JWT has expired\"}");
+            throw new GenericErrorException("Token expired", HttpStatus.UNAUTHORIZED);
         } catch (io.jsonwebtoken.JwtException ex) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Invalid JWT: " + ex.getMessage() + "\"}");
+            throw new GenericErrorException("Token invalid", HttpStatus.UNAUTHORIZED);
         }
     }
 }
