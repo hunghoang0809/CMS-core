@@ -1,10 +1,12 @@
 package com.example.BaseCMS.security;
 
+import com.example.BaseCMS.common.ApiResponse;
 import com.example.BaseCMS.exc.GenericErrorException;
 import com.example.BaseCMS.module.auth.service.JwtService;
 import com.example.BaseCMS.module.user.repo.UserRepository;
 import com.example.BaseCMS.module.user.service.CustomUserDetails;
 import com.example.BaseCMS.module.user.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,9 +66,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
-            throw new GenericErrorException("Token expired", HttpStatus.UNAUTHORIZED);
+            handleJwtException(response, "Token expired", HttpStatus.UNAUTHORIZED.value());
         } catch (io.jsonwebtoken.JwtException ex) {
-            throw new GenericErrorException("Token invalid", HttpStatus.UNAUTHORIZED);
+            handleJwtException(response, "Token invalid", HttpStatus.UNAUTHORIZED.value());
         }
+    }
+
+    private void handleJwtException(HttpServletResponse response, String message, int status) throws IOException {
+        response.setContentType("application/json");
+        response.setStatus(status);
+
+        ApiResponse<?> apiResponse = new ApiResponse<>(status, message, null);
+        new ObjectMapper().writeValue(response.getOutputStream(), apiResponse);
     }
 }
