@@ -147,12 +147,12 @@ public class ProductService  {
         return productDto;
     }
 
-    public Product getProductBySlug(String slug) {
+    public ProductDto getProductBySlug(String slug) {
         Product product = productRepository.findBySlug(slug);
         if (product == null) {
             throw new GenericErrorException("Không tìm thấy sản phẩm với slug " + slug, HttpStatus.NOT_FOUND);
         }
-        return product;
+        return convertToDto(product);
     }
 
     public List<ListProductDto> getAll(Pageable pageable) {
