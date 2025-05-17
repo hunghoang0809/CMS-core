@@ -90,7 +90,8 @@ public class PageService {
         Page page = pageRepository.findById(id).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với id " + id, HttpStatus.NOT_FOUND));
         pageRepository.delete(page);
     }
-    public Page getPageBySlug(String slug) {
-        return pageRepository.findBySlug(slug).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với slug " + slug, HttpStatus.NOT_FOUND));
+    public PageDto getPageBySlug(String slug) {
+        Page page = pageRepository.findBySlug(slug).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với slug " + slug, HttpStatus.NOT_FOUND));
+        return convertToDto(page);
     }
 }
