@@ -1,6 +1,8 @@
-package com.example.BaseCMS.module.keyword;
+package com.example.BaseCMS.module.keyword.service;
 
 import com.example.BaseCMS.exc.GenericErrorException;
+import com.example.BaseCMS.module.keyword.model.Keyword;
+import com.example.BaseCMS.module.keyword.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

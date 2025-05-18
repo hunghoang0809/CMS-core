@@ -1,4 +1,4 @@
-package com.example.BaseCMS.module.keyword;
+package com.example.BaseCMS.module.keyword.request;
 
 import lombok.Data;
 

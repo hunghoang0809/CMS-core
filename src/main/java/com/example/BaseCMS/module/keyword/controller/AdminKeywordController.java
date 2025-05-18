@@ -1,8 +1,9 @@
-package com.example.BaseCMS.module.keyword;
+package com.example.BaseCMS.module.keyword.controller;
 
 import com.example.BaseCMS.common.ApiResponse;
+import com.example.BaseCMS.module.keyword.request.KeywordRq;
+import com.example.BaseCMS.module.keyword.service.KeywordService;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

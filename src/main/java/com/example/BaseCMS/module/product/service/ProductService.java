@@ -3,7 +3,8 @@ package com.example.BaseCMS.module.product.service;
 import com.example.BaseCMS.exc.GenericErrorException;
 import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.category.repo.CategoryRepository;
-import com.example.BaseCMS.module.keyword.KeywordRepository;
+import com.example.BaseCMS.module.keyword.repository.KeywordRepository;
+import com.example.BaseCMS.module.keyword.model.Keyword;
 import com.example.BaseCMS.module.product.dto.ListProductDto;
 import com.example.BaseCMS.module.product.dto.ProductCategoryDto;
 import com.example.BaseCMS.module.product.dto.ProductDto;
@@ -204,7 +205,7 @@ public class ProductService  {
     private void setKeywordInfo(List<ProductKeyword> productKeywords, ProductDto productDto) {
         List<ProductKeywordDto> productKeywordDtos = productKeywords.stream()
                 .map(productKeyword -> {
-                    com.example.BaseCMS.module.keyword.Keyword keyword = keywordRepository.findById(productKeyword.getKeywordId()).orElse(null);
+                    Keyword keyword = keywordRepository.findById(productKeyword.getKeywordId()).orElse(null);
                     return keyword != null ? modelMapper.map(keyword, ProductKeywordDto.class) : null;
                 })
                 .toList();
