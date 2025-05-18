@@ -43,11 +43,22 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<?> handleAllException(Exception ex) {
-        log.error(ex.getMessage(), ex);
+    public final ResponseEntity<?> handleAllException(Exception ex, WebRequest request) {
+        String contentType = request.getHeader("Accept");
+
+        // Nếu request là xuất file CSV
+        if (contentType != null && contentType.contains("text/csv")) {
+            // Trả về plain text hoặc error CSV format đơn giản
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("Lỗi hệ thống khi xuất CSV: " + ex.getMessage());
+        }
+
+        // Còn lại là request thường -> trả về JSON
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .contentType(MediaType.APPLICATION_JSON) // 🔑 ép content-type
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiResponse<>(500, "Lỗi hệ thống", null));
     }
 
