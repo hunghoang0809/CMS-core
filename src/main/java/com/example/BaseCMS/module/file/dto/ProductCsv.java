@@ -39,6 +39,6 @@ public class ProductCsv {
     private String seoDescription;
 
     @CsvBindByName(column = "Từ khóa SEO")
-    private String seoKeyword;
+    private String keyword;
 
 }

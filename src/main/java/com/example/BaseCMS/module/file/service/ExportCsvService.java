@@ -5,7 +5,6 @@ import com.example.BaseCMS.module.category.repo.CategoryRepository;
 import com.example.BaseCMS.module.file.dto.ProductCsv;
 import com.example.BaseCMS.module.keyword.model.Keyword;
 import com.example.BaseCMS.module.keyword.repository.KeywordRepository;
-import com.example.BaseCMS.module.product.dto.ProductCategoryDto;
 import com.example.BaseCMS.module.product.model.CategoryProduct;
 import com.example.BaseCMS.module.product.model.Product;
 import com.example.BaseCMS.module.product.model.ProductKeyword;
@@ -55,7 +54,7 @@ public class ExportCsvService {
             for (String keyword : keywordNames) {
                 keywordString.append(keyword).append(", ");
             }
-            productCsv.setSeoKeyword(keywordString.substring(0, keywordString.length() - 2));
+            productCsv.setKeyword(keywordString.substring(0, keywordString.length() - 2));
         }
     }
     private void setCategory(Product product, ProductCsv productCsv) {
