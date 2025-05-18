@@ -181,8 +181,10 @@ public class ProductService  {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         List<CategoryProduct> categoryProducts = categoryProductRepository.findByProductId(product.getId());
         List<ProductKeyword> productKeywords = productKeywordRepository.findByProductId(product.getId());
-        Brand brand = brandRepository.findById(product.getBrandId()).orElse(null);
-        productDto.setBrandName(brand != null ? brand.getName() : null);
+        if (product.getBrandId() != null) {
+            Brand brand = brandRepository.findById(product.getBrandId()).orElse(null);
+            productDto.setBrandName(brand != null ? brand.getName() : null);
+        }
         if (categoryProducts != null && !categoryProducts.isEmpty()) {
             setCategoryInfo(categoryProducts, productDto);
         }
