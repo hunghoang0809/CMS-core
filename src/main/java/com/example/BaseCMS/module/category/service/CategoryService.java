@@ -74,8 +74,10 @@ public class CategoryService {
     @Transactional
     public void updateCategory(Long id, CreateCategoryRq rq) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + id, HttpStatus.NOT_FOUND));
-        if (categoryRepository.existsBySlug(rq.getSlug())) {
-            throw new GenericErrorException("Slug đã tồn tại", HttpStatus.BAD_REQUEST);
+        if(!category.getSlug().equals(rq.getSlug())) {
+            if (categoryRepository.existsBySlug(rq.getSlug())) {
+                throw new GenericErrorException("Slug đã tồn tại", HttpStatus.BAD_REQUEST);
+            }
         }
         category.setName(rq.getName());
         category.setDescription(rq.getDescription());

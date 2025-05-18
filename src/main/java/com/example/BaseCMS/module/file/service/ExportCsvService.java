@@ -71,19 +71,24 @@ public class ExportCsvService {
     }
 
     public void exportProductsCsv(HttpServletResponse response) throws Exception {
-        List<Product> products = productRepository.findAll(); // Hoặc service
+        try {
+            List<Product> products = productRepository.findAll();
 
-        List<ProductCsv> csvData = products.stream().map(this::convertCsvDto).toList(); ;
+            List<ProductCsv> csvData = products.stream().map(this::convertCsvDto).toList(); ;
 
-        response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=\"products.csv\"");
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=\"products.csv\"");
 
-        StatefulBeanToCsv<ProductCsv> writer = new StatefulBeanToCsvBuilder<ProductCsv>(response.getWriter())
-                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-                .build();
+            StatefulBeanToCsv<ProductCsv> writer = new StatefulBeanToCsvBuilder<ProductCsv>(response.getWriter())
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                    .build();
 
-        writer.write(csvData);
+            writer.write(csvData);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while exporting CSV: " + e.getMessage(), e);
+        }
+
     }
 
 }
