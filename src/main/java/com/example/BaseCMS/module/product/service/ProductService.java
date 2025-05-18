@@ -161,6 +161,8 @@ public class ProductService  {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         List<CategoryProduct> categoryProducts = categoryProductRepository.findByProductId(product.getId());
         List<ProductKeyword> productKeywords = productKeywordRepository.findByProductId(product.getId());
+        Brand brand = brandRepository.findById(product.getBrandId()).orElse(null);
+        productDto.setBrandName(brand != null ? brand.getName() : null);
         if (categoryProducts != null && !categoryProducts.isEmpty()) {
             setCategoryInfo(categoryProducts, productDto);
         }
@@ -202,13 +204,12 @@ public class ProductService  {
 
     public List<ListProductDto> getAll(Pageable pageable) {
         List<Category> categories = categoryRepository.findAllParentCategory();
-        List<ListProductDto> listProductDtos = categories.stream()
+        return categories.stream()
                 .map(category -> {
                     Page<Product> products = productRepository.findProductByCategoryId(category.getId(), pageable);
                     return new ListProductDto(products, category.getName(), category.getId());
                 })
                 .toList();
-        return listProductDtos;
     }
 
 

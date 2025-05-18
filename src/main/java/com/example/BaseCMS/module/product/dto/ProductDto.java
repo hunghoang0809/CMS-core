@@ -1,8 +1,6 @@
 package com.example.BaseCMS.module.product.dto;
 
 
-import com.example.BaseCMS.module.category.model.Category;
-import com.example.BaseCMS.module.page.dto.PageCategoryDto;
 import lombok.Data;
 
 import java.util.List;
@@ -17,6 +15,7 @@ public class ProductDto {
     private String shortDescription;
     private List<ProductCategoryDto> productCategories;
     private List<ProductKeywordDto> productKeywords;
+    private String brandName;
     private List<Long> keywordIds;
     private List<String> keywordNames;
     private String seoTitle;
