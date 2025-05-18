@@ -10,5 +10,7 @@ public interface CategoryProductRepository extends JpaRepository<CategoryProduct
 
     public boolean existsCategoryProductByCategoryIdAndProductId(Long categoryId, Long productId);
 
+    public void deleteAllByProductId(Long productId);
+
     public List<CategoryProduct> findByProductId(Long productId);
 }

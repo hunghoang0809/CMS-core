@@ -142,6 +142,23 @@ public class PageService {
         page.setSeoDescription(pageRq.getSeoDescription());
         page.setStatus(pageRq.getStatus());
         pageRepository.save(page);
+        updateCategory(pageRq, page);
+        updateKeyword(pageRq, page);
+    }
+
+    @Transactional
+    protected void updateCategory(PageRequest pageRq, Page page) {
+        if (pageRq.getCategoryId() != null && !pageRq.getCategoryId().isEmpty()) {
+            pageCategoryRepository.deleteAllByPageId(page.getId());
+            createCategoryPage(pageRq, page);
+        }
+    }
+    @Transactional
+    protected void updateKeyword(PageRequest pageRq, Page page) {
+        if (pageRq.getKeywordId() != null && !pageRq.getKeywordId().isEmpty()) {
+            pageKeywordRepository.deleteAllByPageId(page.getId());
+            createPageKeyword(pageRq, page);
+        }
     }
 
     @Transactional

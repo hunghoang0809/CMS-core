@@ -8,6 +8,7 @@ import java.util.List;
 public interface PageKeywordRepository extends JpaRepository<PageKeyword, Long> {
     boolean existsByPageId(Long pageId, Long keywordId);
 
+    void deleteAllByPageId(Long pageId);
     List<PageKeyword> findAllByPageId(Long pageId);
 
 }

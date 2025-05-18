@@ -122,6 +122,25 @@ public class ProductService  {
         product.setSeoTitle(rq.getSeoTitle());
         product.setSeoDescription(rq.getSeoDescription());
         productRepository.save(product);
+        updateCategoryProduct(rq, product);
+        updateProductKeyword(rq, product);
+    }
+
+    @Transactional
+    protected void updateCategoryProduct(CreateProductRq rq, Product product) {
+        List<CategoryProduct> categoryProducts = categoryProductRepository.findByProductId(product.getId());
+        if (categoryProducts != null && !categoryProducts.isEmpty()) {
+            categoryProductRepository.deleteAll(categoryProducts);
+        }
+        createCategoryProduct(rq, product);
+    }
+    @Transactional
+    protected void updateProductKeyword(CreateProductRq rq, Product product) {
+        List<ProductKeyword> productKeywords = productKeywordRepository.findByProductId(product.getId());
+        if (productKeywords != null && !productKeywords.isEmpty()) {
+            productKeywordRepository.deleteAll(productKeywords);
+        }
+        createProductKeyword(rq, product);
     }
 
     public Page<ProductDto> list(Pageable pageable, Long categoryId) {
