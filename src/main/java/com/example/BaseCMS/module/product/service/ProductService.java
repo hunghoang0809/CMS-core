@@ -3,16 +3,20 @@ package com.example.BaseCMS.module.product.service;
 import com.example.BaseCMS.exc.GenericErrorException;
 import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.category.repo.CategoryRepository;
+import com.example.BaseCMS.module.keyword.KeywordRepository;
 import com.example.BaseCMS.module.product.dto.ListProductDto;
+import com.example.BaseCMS.module.product.dto.ProductCategoryDto;
 import com.example.BaseCMS.module.product.dto.ProductDto;
+import com.example.BaseCMS.module.product.dto.ProductKeywordDto;
 import com.example.BaseCMS.module.product.model.Brand;
 import com.example.BaseCMS.module.product.model.CategoryProduct;
 import com.example.BaseCMS.module.product.model.Product;
+import com.example.BaseCMS.module.product.model.ProductKeyword;
 import com.example.BaseCMS.module.product.repo.BrandRepository;
 import com.example.BaseCMS.module.product.repo.CategoryProductRepository;
+import com.example.BaseCMS.module.product.repo.ProductKeywordRepository;
 import com.example.BaseCMS.module.product.repo.ProductRepository;
 import com.example.BaseCMS.module.product.rq.CreateProductRq;
-import com.example.BaseCMS.module.product.rq.ProductFilterRq;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -31,6 +35,8 @@ public class ProductService  {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final BrandRepository brandRepository;
+    private final ProductKeywordRepository productKeywordRepository;
+    private final KeywordRepository keywordRepository;
 
 
     @Transactional
@@ -52,10 +58,13 @@ public class ProductService  {
         if( rq.getCategoryId() != null&&!rq.getCategoryId().isEmpty() ) {
             createCategoryProduct(rq, product);
         }
+        if (rq.getKeywordId() != null && !rq.getKeywordId().isEmpty()) {
+            createProductKeyword(rq, product);
+        }
     }
 
     @Transactional
-    public void createCategoryProduct(CreateProductRq rq, Product product) {
+    protected void createCategoryProduct(CreateProductRq rq, Product product) {
 
 
         for (Long categoryId : rq.getCategoryId()) {
@@ -84,7 +93,22 @@ public class ProductService  {
         }
     }
 
+    @Transactional
+    protected void createProductKeyword(CreateProductRq rq, Product product) {
+            for (Long keywordId : rq.getKeywordId()) {
+                if (!keywordRepository.existsById(keywordId)) {
+                    throw new GenericErrorException("Từ khóa với id " + keywordId + " chưa được tạo", HttpStatus.BAD_REQUEST);
+                }
+                ProductKeyword productKeyword = ProductKeyword.builder()
+                        .productId(product.getId())
+                        .keywordId(keywordId)
+                        .build();
+                productKeywordRepository.save(productKeyword);
+            }
+    }
 
+
+    @Transactional
     public void update(long id, CreateProductRq rq) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new GenericErrorException("Không tìm thấy sản phẩm với id " + id, HttpStatus.BAD_REQUEST));
@@ -102,16 +126,19 @@ public class ProductService  {
 
     public Page<ProductDto> list(Pageable pageable, Long categoryId) {
         Page<Product> products = productRepository.findAllProduct(pageable, categoryId);
-        return products.map(product -> modelMapper.map(product, ProductDto.class));
+        return products.map(this::convertToDto);
     }
 
 
+    @Transactional
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
 
-    public Product getById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public ProductDto getById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new GenericErrorException("Không tìm thấy sản phẩm với id " + id, HttpStatus.NOT_FOUND));
+        return convertToDto(product);
     }
 
     public Page<ProductDto> getAllProduct(Pageable pageable, String categorySlug, String brandSlug) {
@@ -133,25 +160,43 @@ public class ProductService  {
     public ProductDto convertToDto (Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         List<CategoryProduct> categoryProducts = categoryProductRepository.findByProductId(product.getId());
+        List<ProductKeyword> productKeywords = productKeywordRepository.findByProductId(product.getId());
         if (categoryProducts != null && !categoryProducts.isEmpty()) {
-            productDto.setCategoryIds(categoryProducts.stream()
-                    .map(CategoryProduct::getCategoryId)
-                    .toList());
-            productDto.setCategoryNames(categoryProducts.stream()
-                    .map(categoryProduct -> {
-                        Category category = categoryRepository.findById(categoryProduct.getCategoryId()).orElse(null);
-                        return category != null ? category.getName() : null;
-                    })
-                    .toList());
+            setCategoryInfo(categoryProducts, productDto);
+        }
+        if (productKeywords != null && !productKeywords.isEmpty()) {
+            setKeywordInfo(productKeywords, productDto);
         }
         return productDto;
     }
+
+    private void setCategoryInfo(List<CategoryProduct> categoryProducts, ProductDto productDto) {
+          List<ProductCategoryDto> productCategoryDtos = categoryProducts.stream()
+                .map(categoryProduct -> {
+                    Category category = categoryRepository.findById(categoryProduct.getCategoryId()).orElse(null);
+                    return category != null ? modelMapper.map(category, ProductCategoryDto.class) : null;
+                })
+                .toList();
+        productDto.setProductCategories(productCategoryDtos);
+    }
+
+    private void setKeywordInfo(List<ProductKeyword> productKeywords, ProductDto productDto) {
+        List<ProductKeywordDto> productKeywordDtos = productKeywords.stream()
+                .map(productKeyword -> {
+                    com.example.BaseCMS.module.keyword.Keyword keyword = keywordRepository.findById(productKeyword.getKeywordId()).orElse(null);
+                    return keyword != null ? modelMapper.map(keyword, ProductKeywordDto.class) : null;
+                })
+                .toList();
+        productDto.setProductKeywords(productKeywordDtos);
+    }
+
 
     public ProductDto getProductBySlug(String slug) {
         Product product = productRepository.findBySlug(slug);
         if (product == null) {
             throw new GenericErrorException("Không tìm thấy sản phẩm với slug " + slug, HttpStatus.NOT_FOUND);
         }
+
         return convertToDto(product);
     }
 

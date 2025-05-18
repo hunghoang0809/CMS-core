@@ -17,6 +17,7 @@ public class CreateProductRq {
     private String description;
     private String shortDescription;
     private List<Long> categoryId;
+    private List<Long> keywordId;
     @NotEmpty(message = "Giá sản phẩm không được để trống")
     private Long price;
     private String imageUrl;

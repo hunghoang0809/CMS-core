@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +21,8 @@ public class PageRequest {
     private PageEnum status;
     private String imgUrl;
     private String shortDescription;
-    private Long categoryId;
+    private List<Long> categoryId;
+    private List<Long> keywordId;
     @NotEmpty(message = "Slug không được để trống")
     private String slug;
     private String seoTitle;

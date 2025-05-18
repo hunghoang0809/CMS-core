@@ -71,6 +71,7 @@ public class CategoryService {
         return categoryRepository.findById(id).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + id, HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
     public void updateCategory(Long id, CreateCategoryRq rq) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + id, HttpStatus.NOT_FOUND));
         if (categoryRepository.existsBySlug(rq.getSlug())) {
@@ -83,6 +84,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với id " + id, HttpStatus.NOT_FOUND));
         categoryRepository.delete(category);

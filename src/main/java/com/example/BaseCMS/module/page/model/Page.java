@@ -23,7 +23,6 @@ public class Page extends BaseEntity {
     private long authorId;
     @Enumerated(EnumType.ORDINAL)
     private PageEnum status;
-    private Long categoryId;
     private String imageUrl;
     private String slug;
     private String shortDescription;

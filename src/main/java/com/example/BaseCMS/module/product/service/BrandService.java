@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class BrandService {
         return brandRepository.existsBySlug(slug);
     }
 
+    @Transactional
     public Brand createBrand(CreateBrandRq brand) {
         Brand newBrand = Brand.builder()
                 .name(brand.getName())
@@ -36,6 +38,7 @@ public class BrandService {
         return brandRepository.findById(id).orElseThrow(() -> new GenericErrorException("Thương hiệu không tồn tại", HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
     public Brand updateBrand(Long id, CreateBrandRq rq) {
         Brand brand = findById(id);
         brand.setName(rq.getName());
@@ -43,6 +46,7 @@ public class BrandService {
         return brandRepository.save(brand);
     }
 
+    @Transactional
     public void deleteBrand(Long id) {
         Brand brand = findById(id);
         brandRepository.delete(brand);

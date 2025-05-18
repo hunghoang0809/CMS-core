@@ -1,9 +1,12 @@
 package com.example.BaseCMS.module.page.dto;
 
+import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.page.PageEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,10 +21,10 @@ public class PageDto {
     private PageEnum status;
     private Long authorId;
     private String authorName;
-    private Long categoryId;
+    private List<PageCategoryDto> categories;
+    private List<PageKeywordDto> keywords;
     private String seoTitle;
     private String seoDescription;
-    private String categoryName;
     private String createdAt;
     private String updatedAt;
     private String deletedAt;
