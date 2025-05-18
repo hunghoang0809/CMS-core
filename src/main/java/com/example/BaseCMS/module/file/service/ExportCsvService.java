@@ -93,9 +93,8 @@ public class ExportCsvService {
 
         StatefulBeanToCsv<ProductCsv> beanToCsv = new StatefulBeanToCsvBuilder<ProductCsv>(writer)
                 .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                .withSeparator(';')  // dùng dấu chấm phẩy phân tách
                 .build();
-
         beanToCsv.write(csvData);
         writer.flush();
 
