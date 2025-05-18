@@ -14,7 +14,8 @@ public class AdminSlideController {
 
     @Operation(summary = "Create slide")
     @PostMapping("")
-    public ResponseEntity<?> create(SlideRq slideRq) {
+    public ResponseEntity<?> create(
+           @RequestBody SlideRq slideRq) {
          slideService.create(slideRq);
         return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
     }
