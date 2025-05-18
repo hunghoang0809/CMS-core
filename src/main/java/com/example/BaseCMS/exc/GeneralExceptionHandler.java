@@ -3,10 +3,7 @@ package com.example.BaseCMS.exc;
 import com.example.BaseCMS.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,6 +34,16 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
             return ResponseEntity.badRequest().body(new ApiResponse<>(400, message, null));
         }
         return ResponseEntity.badRequest().body(new ApiResponse<>(400, "Validation failed", null));
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllExceptions(Exception ex, WebRequest request) {
+        log.error("Unexpected error: ", ex);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ApiResponse<>(500, "Lỗi hệ thống", null));
     }
 
     @ExceptionHandler(GenericErrorException.class)
