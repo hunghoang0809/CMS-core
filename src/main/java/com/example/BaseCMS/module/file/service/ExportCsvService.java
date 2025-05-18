@@ -12,6 +12,7 @@ import com.example.BaseCMS.module.product.repo.BrandRepository;
 import com.example.BaseCMS.module.product.repo.CategoryProductRepository;
 import com.example.BaseCMS.module.product.repo.ProductKeywordRepository;
 import com.example.BaseCMS.module.product.repo.ProductRepository;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,6 +21,8 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.CSVWriter;
 
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -71,23 +74,31 @@ public class ExportCsvService {
     }
 
     public void exportProductsCsv(HttpServletResponse response) throws Exception {
-        try {
+
             List<Product> products = productRepository.findAll();
 
             List<ProductCsv> csvData = products.stream().map(this::convertCsvDto).toList(); ;
 
-            response.setContentType("text/csv");
-            response.setHeader("Content-Disposition", "attachment; filename=\"products.csv\"");
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"products.csv\"");
+        response.setCharacterEncoding("UTF-8");
 
-            StatefulBeanToCsv<ProductCsv> writer = new StatefulBeanToCsvBuilder<ProductCsv>(response.getWriter())
-                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-                    .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-                    .build();
+        ServletOutputStream outputStream = response.getOutputStream();
+        // Ghi BOM UTF-8
+        outputStream.write(0xEF);
+        outputStream.write(0xBB);
+        outputStream.write(0xBF);
 
-            writer.write(csvData);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while exporting CSV: " + e.getMessage(), e);
-        }
+        OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+
+        StatefulBeanToCsv<ProductCsv> beanToCsv = new StatefulBeanToCsvBuilder<ProductCsv>(writer)
+                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                .build();
+
+        beanToCsv.write(csvData);
+        writer.flush();
+
 
     }
 
