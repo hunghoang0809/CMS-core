@@ -11,6 +11,7 @@ public class ProductDto {
     private String name;
     private String imageUrl;
     private Long price;
+    private String slug;
     private Long discountPrice;
     private String shortDescription;
     private List<ProductCategoryDto> productCategories;
