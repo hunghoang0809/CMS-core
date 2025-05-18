@@ -18,7 +18,7 @@ public class ExportCsvController {
 
     private final ExportCsvService exportCsvService;
     @Operation(summary = "Export CSV")
-    @GetMapping("/product")
+    @GetMapping(value = "/product",produces = "text/csv")
     public ResponseEntity<?> exportProduct(HttpServletResponse response) throws Exception {
         exportCsvService.exportProductsCsv(response);
         return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
