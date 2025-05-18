@@ -37,15 +37,6 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleAllExceptions(Exception ex, WebRequest request) {
-        log.error("Unexpected error: ", ex);
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ApiResponse<>(500, "Lỗi hệ thống", null));
-    }
-
     @ExceptionHandler(GenericErrorException.class)
     public ResponseEntity<?> genericError(GenericErrorException exception) {
         return new ResponseEntity<>(new ApiResponse<>(exception.getHttpStatus().value(), exception.getMessage(), null), exception.getHttpStatus());
@@ -54,7 +45,10 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<?> handleAllException(Exception ex) {
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON) // 🔑 ép content-type
+                .body(new ApiResponse<>(500, "Lỗi hệ thống", null));
     }
 
     @ExceptionHandler(NotFoundException.class)
