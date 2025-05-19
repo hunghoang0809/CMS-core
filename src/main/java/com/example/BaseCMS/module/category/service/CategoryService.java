@@ -1,6 +1,7 @@
 package com.example.BaseCMS.module.category.service;
 
 import com.example.BaseCMS.exc.GenericErrorException;
+import com.example.BaseCMS.module.category.dto.AdminCategoryDto;
 import com.example.BaseCMS.module.category.dto.ListCategoryDto;
 import com.example.BaseCMS.module.category.model.Category;
 import com.example.BaseCMS.module.category.repo.CategoryRepository;
@@ -9,8 +10,8 @@ import com.example.BaseCMS.module.product.model.CategoryProduct;
 import com.example.BaseCMS.module.product.model.Product;
 import com.example.BaseCMS.module.product.repo.CategoryProductRepository;
 import com.example.BaseCMS.module.product.repo.ProductRepository;
-import com.example.BaseCMS.module.product.rq.CreateProductRq;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final CategoryProductRepository categoryProductRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public Category createCategory(CreateCategoryRq rq) {
@@ -59,8 +61,17 @@ public class CategoryService {
         }
     }
 
-    public Page<Category> getAllCategory(Pageable pageable) {
-        return categoryRepository.findAll(pageable);
+    public Page<AdminCategoryDto> getAllCategory(Pageable pageable) {
+        Page<Category> categories = categoryRepository.findAll(pageable);
+        return categories.map(this::convertToAdminDto);
+    }
+
+    public AdminCategoryDto convertToAdminDto(Category category) {
+      AdminCategoryDto adminCategoryDto = modelMapper.map(category, AdminCategoryDto.class);
+      categoryRepository.findById(category.getParentId()).ifPresent(parentCategory -> {
+          adminCategoryDto.setParentName(parentCategory.getName());
+      });
+      return adminCategoryDto;
     }
 
     public Category getCategoryBySlug(String slug) {
