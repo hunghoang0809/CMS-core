@@ -131,7 +131,7 @@ public class PageService {
     }
 
     @Transactional
-    public void updatePage(long id, PageRequest pageRq){
+    public void updatePage(Long id, PageRequest pageRq){
         Page page = pageRepository.findById(id).orElseThrow(()->new GenericErrorException("Không tìm thấy trang với id " + id, HttpStatus.NOT_FOUND));
         page.setTitle(pageRq.getTitle());
         page.setContent(pageRq.getContent());
