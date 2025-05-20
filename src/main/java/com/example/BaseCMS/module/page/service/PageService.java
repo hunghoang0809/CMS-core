@@ -39,6 +39,9 @@ public class PageService {
 
     @Transactional
     public Page createPage(PageRequest pageRq, Long userId) {
+        if (pageRepository.existsBySlug(pageRq.getSlug())) {
+            throw new GenericErrorException("Slug đã tồn tại", HttpStatus.BAD_REQUEST);
+        }
         Page page = Page.builder()
                 .title(pageRq.getTitle())
                 .content(pageRq.getContent())

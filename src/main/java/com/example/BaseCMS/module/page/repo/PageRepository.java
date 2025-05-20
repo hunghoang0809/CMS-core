@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface PageRepository extends JpaRepository<Page, Long> {
     Optional<Page> findBySlug(String slug);
+    boolean existsBySlug(String slug);
 
     org.springframework.data.domain.Page<Page> findAllByStatus(PageEnum status, Pageable pageable);
 

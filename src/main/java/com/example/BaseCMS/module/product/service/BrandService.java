@@ -24,6 +24,9 @@ public class BrandService {
 
     @Transactional
     public Brand createBrand(CreateBrandRq brand) {
+        if (existsBySlug(brand.getSlug())) {
+            throw new GenericErrorException("Slug đã tồn tại", HttpStatus.BAD_REQUEST);
+        }
         Brand newBrand = Brand.builder()
                 .name(brand.getName())
                 .slug(brand.getSlug())
