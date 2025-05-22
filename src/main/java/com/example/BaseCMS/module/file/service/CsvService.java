@@ -117,47 +117,60 @@ public class CsvService {
 
     @Transactional
     public void importProductCsv(MultipartFile file) throws Exception {
-        List<Product> productList = new ArrayList<>();
+        int BATCH_SIZE = 500;
+        List<Pair<Product, CSVRecord>> batchRecords = new ArrayList<>(BATCH_SIZE);
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
              CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-
-            List<Pair<Product, CSVRecord>> productRecords = new ArrayList<>();
 
             for (CSVRecord record : csvParser) {
                 String slug = toSlug(record.get("Tên"));
                 if (productRepository.existsBySlug(slug)) {
                     continue;
                 }
+
                 Product product = new Product();
                 product.setName(record.get("Tên"));
                 product.setPrice(parseLong(record.get("Giá bán thường")));
                 product.setDiscountPrice(parseLong(record.get("Giá khuyến mãi")));
                 product.setDescription(record.get("Mô tả"));
                 product.setShortDescription(record.get("Mô tả ngắn"));
-                System.out.println(record.get("Hình ảnh"));
                 product.setImageUrl(record.get("Hình ảnh"));
                 product.setSlug(slug);
 
-                productRecords.add(Pair.of(product, record));
+                batchRecords.add(Pair.of(product, record));
+
+                if (batchRecords.size() == BATCH_SIZE) {
+                    saveBatchWithCategories(batchRecords);
+                    batchRecords.clear(); // clear để xử lý batch tiếp theo
+                }
             }
 
-// Lưu product
-            List<Product> savedProducts = productRepository.saveAll(
-                    productRecords.stream().map(Pair::getLeft).toList()
-            );
-
-// Gán danh mục
-            for (int i = 0; i < savedProducts.size(); i++) {
-                Product p = savedProducts.get(i);
-                CSVRecord record = productRecords.get(i).getRight();
-                processAndAssignCategories(record.get("Danh mục"), p.getId());
+            // Xử lý phần còn lại < BATCH_SIZE
+            if (!batchRecords.isEmpty()) {
+                saveBatchWithCategories(batchRecords);
             }
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error reading CSV file: " + e.getMessage(), e);
         }
     }
+
+    // Hàm xử lý lưu và gán danh mục cho 1 batch
+    private void saveBatchWithCategories(List<Pair<Product, CSVRecord>> batch) {
+        // Lưu sản phẩm
+        List<Product> savedProducts = productRepository.saveAll(
+                batch.stream().map(Pair::getLeft).toList()
+        );
+
+        // Gán danh mục
+        for (int i = 0; i < savedProducts.size(); i++) {
+            Product product = savedProducts.get(i);
+            CSVRecord record = batch.get(i).getRight();
+            processAndAssignCategories(record.get("Danh mục"), product.getId());
+        }
+    }
+
 
 
     @Transactional
