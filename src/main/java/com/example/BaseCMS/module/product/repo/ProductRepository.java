@@ -16,6 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Product findBySlug(String slug);
 
+    boolean existsBySlug(String slug);
 
     @Query(
     "SELECT  p FROM Product p " +
