@@ -135,6 +135,7 @@ public class CsvService {
                 product.setDiscountPrice(parseLong(record.get("Giá khuyến mãi")));
                 product.setDescription(record.get("Mô tả"));
                 product.setShortDescription(record.get("Mô tả ngắn"));
+                System.out.println(record.get("Hình ảnh"));
                 product.setImageUrl(record.get("Hình ảnh"));
                 product.setSlug(slug);
 
