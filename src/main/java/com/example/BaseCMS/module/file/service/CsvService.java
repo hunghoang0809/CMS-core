@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.tuple.Pair;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -119,7 +120,9 @@ public class CsvService {
         List<Product> productList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())){
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
+            List<Pair<Product, CSVRecord>> productRecords = new ArrayList<>();
 
             for (CSVRecord record : csvParser) {
                 String slug = toSlug(record.get("Tên"));
@@ -134,15 +137,29 @@ public class CsvService {
                 product.setShortDescription(record.get("Mô tả ngắn"));
                 product.setImageUrl(record.get("Hình ảnh"));
                 product.setSlug(slug);
-                processAndAssignCategories(record.get("Danh mục"), product.getId());
-                productList.add(product);
-            }
-        }
-        productRepository.saveAll(productList);
 
+                productRecords.add(Pair.of(product, record));
+            }
+
+// Lưu product
+            List<Product> savedProducts = productRepository.saveAll(
+                    productRecords.stream().map(Pair::getLeft).toList()
+            );
+
+// Gán danh mục
+            for (int i = 0; i < savedProducts.size(); i++) {
+                Product p = savedProducts.get(i);
+                CSVRecord record = productRecords.get(i).getRight();
+                processAndAssignCategories(record.get("Danh mục"), p.getId());
+            }
+
+        }catch (IOException e) {
+            throw new RuntimeException("Error reading CSV file: " + e.getMessage(), e);
+        }
     }
 
 
+    @Transactional
     public void processAndAssignCategories(String categoryPath, Long productId) {
         String[] parts = categoryPath.split(">");
         long parentId = 0;
