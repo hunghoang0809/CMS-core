@@ -111,7 +111,7 @@ public class CategoryService {
                     List<Category> subCategories = categories.stream()
                            .filter(subCategory -> subCategory.getParentId() == category.getId())
                            .toList();
-                    return new ListCategoryDto(category.getId(), category.getName(), category.getSlug(), subCategories);
+                    return new ListCategoryDto(category.getId(), category.getName(), category.getSlug(), subCategories, category.getCreatedAt(), category.getUpdatedAt());
                })
                .toList();
     }

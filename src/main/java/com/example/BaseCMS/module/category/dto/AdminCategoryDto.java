@@ -11,4 +11,6 @@ public class AdminCategoryDto {
     private String imgUrl;
     private Long parentId;
     private String parentName;
+    private String createdAt;
+    private String updatedAt;
 }

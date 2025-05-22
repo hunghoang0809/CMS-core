@@ -161,7 +161,7 @@ public class ProductService  {
         return convertToDto(product);
     }
 
-    public Page<ProductDto> getAllProduct(Pageable pageable, String categorySlug, String brandSlug) {
+    public Page<ProductDto> getAllProduct(Pageable pageable, String categorySlug, String brandSlug, String keyword) {
         Long categoryId = null;
         Long brandId = null;
         if (categorySlug != null) {
@@ -173,7 +173,7 @@ public class ProductService  {
             brandId = brand.getId();
 
         }
-        Page<Product> products = productRepository.findProduct(pageable, categoryId , brandId);
+        Page<Product> products = productRepository.findProduct(pageable, categoryId , brandId, keyword);
         return products.map(this::convertToDto);
     }
 
@@ -229,7 +229,7 @@ public class ProductService  {
         return categories.stream()
                 .map(category -> {
                     Page<Product> products = productRepository.findProductByCategoryId(category.getId(), pageable);
-                    return new ListProductDto(products, category.getName(), category.getId());
+                    return new ListProductDto(products, category.getName(), category.getId(), category.getSlug());
                 })
                 .toList();
     }

@@ -31,11 +31,12 @@ public class ProductController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "categorySlug", required = false) String categorySlug,
-            @RequestParam(value = "brandSlug", required = false) String brandSlug
+            @RequestParam(value = "brandSlug", required = false) String brandSlug,
+            @RequestParam(value = "keyword", required = false) String keyword
             ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return  ResponseEntity.ok(
-                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categorySlug, brandSlug)));
+                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categorySlug, brandSlug, keyword)));
     }
 
     @Operation(summary = "Get product by slug")

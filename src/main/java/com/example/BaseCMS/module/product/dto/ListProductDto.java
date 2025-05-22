@@ -14,4 +14,5 @@ public class ListProductDto {
     private Page<Product> products;
     private String categoryName;
     private Long categoryId;
+    private String categorySlug;
 }
