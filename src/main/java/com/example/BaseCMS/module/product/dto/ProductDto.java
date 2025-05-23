@@ -13,12 +13,11 @@ public class ProductDto {
     private Long price;
     private String slug;
     private Long discountPrice;
+    private String description;
     private String shortDescription;
     private List<ProductCategoryDto> productCategories;
     private List<ProductKeywordDto> productKeywords;
     private String brandName;
-    private List<Long> keywordIds;
-    private List<String> keywordNames;
     private String seoTitle;
     private String seoDescription;
  }

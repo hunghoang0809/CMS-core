@@ -173,7 +173,7 @@ public class ProductService  {
             brandId = brand.getId();
 
         }
-        Page<Product> products = productRepository.findProduct(pageable, categoryId , brandId, keyword);
+        Page<Product> products = productRepository.findProduct( categoryId , brandId, keyword, pageable);
         return products.map(this::convertToDto);
     }
 
