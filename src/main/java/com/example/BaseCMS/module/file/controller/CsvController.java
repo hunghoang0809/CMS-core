@@ -25,7 +25,12 @@ public class CsvController {
     @Operation(summary = "Import CSV")
     @PostMapping(value ="import/product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> importProduct( @RequestPart("file") MultipartFile file) throws Exception {
-        CsvService.importProductCsv(file);
-        return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
+        try {
+            CsvService.importProductCsv(file);
+            return ResponseEntity.ok(new ApiResponse<>(200, "Success", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new ApiResponse<>(500, "Error: " + e.getMessage(), null));
+        }
     }
 }
