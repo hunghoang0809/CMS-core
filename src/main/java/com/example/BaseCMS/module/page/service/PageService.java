@@ -104,9 +104,6 @@ public class PageService {
         if(user!= null){
             pageDto.setAuthorName(user.getUsername());
         }
-        if(!pageCategory.isEmpty()){
-            setCategories(pageDto, categories);
-        }
         if(!pageKeyword.isEmpty()){
             setKeywords(pageDto, keywords);
         }
@@ -119,9 +116,7 @@ public class PageService {
 
     }
 
-    private void setCategories(PageDto pageDto, List<Category> categories) {
-        pageDto.setCategories(categories.stream().map(category -> modelMapper.map(category,PageCategoryDto.class)).toList());
-    }
+
 
     public org.springframework.data.domain.Page<PageDto> getAllPage(org.springframework.data.domain.Pageable pageable) {
         org.springframework.data.domain.Page<Page> pages = pageRepository.findAll(pageable);
