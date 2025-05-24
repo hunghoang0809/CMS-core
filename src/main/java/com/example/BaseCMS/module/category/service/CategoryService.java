@@ -104,7 +104,7 @@ public class CategoryService {
     }
 
     public List<ListCategoryDto> getAllGroupByParentId() {
-       List<Category> categories = categoryRepository.findAll();
+       List<Category> categories = categoryRepository.findAllSortByName();
         return categories.stream()
                .filter(category -> category.getParentId() == 0)
                .map(category -> {

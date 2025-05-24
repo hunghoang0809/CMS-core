@@ -16,6 +16,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
    Optional<Category> findByNameAndParentId(String name, Long parentId);
 
 
+   @Query("SELECT c FROM Category c WHERE c.parentId = 0 order by c.name ASC ")
+   List<Category> findAllSortByName();
+
 
 
     List<Category> findByParentId(Long parentId);
