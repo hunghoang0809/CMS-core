@@ -129,18 +129,18 @@ public class CsvService {
         ){
             System.out.println("Headers in CSV: " + csvParser.getHeaderMap().keySet());
             for (CSVRecord record : csvParser) {
-                String slug = toSlug(record.get("Tên"));
+                String slug = toSlug(record.get("Name")); // "Tên" → "Name"
                 if (productRepository.existsBySlug(slug)) {
                     continue;
                 }
 
                 Product product = new Product();
-                product.setName(record.get("Tên"));
-                product.setPrice(parseLong(record.get("Giá bán thường")));
-                product.setDiscountPrice(parseLong(record.get("Giá khuyến mãi")));
-                product.setDescription(record.get("Mô tả"));
-                product.setShortDescription(record.get("Mô tả ngắn"));
-                product.setImageUrl(record.get("Hình ảnh"));
+                product.setName(record.get("Name")); // "Tên" → "Name"
+                product.setPrice(parseLong(record.get("Regular price"))); // "Giá bán thường" → "Regular price"
+                product.setDiscountPrice(parseLong(record.get("Sale price"))); // "Giá khuyến mãi" → "Sale price"
+                product.setDescription(record.get("Description")); // "Mô tả" → "Description"
+                product.setShortDescription(record.get("Short description")); // "Mô tả ngắn" → "Short description"
+                product.setImageUrl(record.get("Images")); // "Hình ảnh" → "Images"
                 product.setSlug(slug);
 
                 batchRecords.add(Pair.of(product, record));
@@ -172,7 +172,7 @@ public class CsvService {
         for (int i = 0; i < savedProducts.size(); i++) {
             Product product = savedProducts.get(i);
             CSVRecord record = batch.get(i).getRight();
-            processAndAssignCategories(record.get("Danh mục"), product.getId());
+            processAndAssignCategories(record.get("Categories"), product.getId());
         }
     }
 
