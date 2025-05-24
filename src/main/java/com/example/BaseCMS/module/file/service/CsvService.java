@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -120,9 +121,13 @@ public class CsvService {
         int BATCH_SIZE = 500;
         List<Pair<Product, CSVRecord>> batchRecords = new ArrayList<>(BATCH_SIZE);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-
+        try (
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new BOMInputStream(file.getInputStream()), StandardCharsets.UTF_8)
+                );
+                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
+        ){
+            System.out.println("Headers in CSV: " + csvParser.getHeaderMap().keySet());
             for (CSVRecord record : csvParser) {
                 String slug = toSlug(record.get("Tên"));
                 if (productRepository.existsBySlug(slug)) {
