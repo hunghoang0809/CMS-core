@@ -118,7 +118,7 @@ public class CsvService {
 
     @Transactional
     public void importProductCsv(MultipartFile file) throws Exception {
-        int BATCH_SIZE = 500;
+        int BATCH_SIZE = 200;
         List<Pair<Product, CSVRecord>> batchRecords = new ArrayList<>(BATCH_SIZE);
 
         try (
