@@ -145,7 +145,7 @@ public class ProductService  {
     }
 
     public Page<ProductDto> list(Pageable pageable, Long categoryId) {
-        Page<Product> products = productRepository.findAllProduct(pageable, categoryId);
+        Page<Product> products = productRepository.findAllProduct(categoryId, pageable);
         return products.map(this::convertToDto);
     }
 
@@ -181,10 +181,6 @@ public class ProductService  {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
         List<CategoryProduct> categoryProducts = categoryProductRepository.findByProductId(product.getId());
         List<ProductKeyword> productKeywords = productKeywordRepository.findByProductId(product.getId());
-        if (product.getBrandId() != null) {
-            Brand brand = brandRepository.findById(product.getBrandId()).orElse(null);
-            productDto.setBrandName(brand != null ? brand.getName() : null);
-        }
         if (categoryProducts != null && !categoryProducts.isEmpty()) {
             setCategoryInfo(categoryProducts, productDto);
         }

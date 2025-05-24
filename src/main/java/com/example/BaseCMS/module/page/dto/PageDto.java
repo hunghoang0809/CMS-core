@@ -21,7 +21,6 @@ public class PageDto {
     private PageEnum status;
     private Long authorId;
     private String authorName;
-    private List<PageCategoryDto> categories;
     private List<PageKeywordDto> keywords;
     private String seoTitle;
     private String seoDescription;

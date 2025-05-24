@@ -17,7 +17,6 @@ public class ProductDto {
     private String shortDescription;
     private List<ProductCategoryDto> productCategories;
     private List<ProductKeywordDto> productKeywords;
-    private String brandName;
     private String seoTitle;
     private String seoDescription;
  }

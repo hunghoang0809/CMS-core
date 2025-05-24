@@ -103,17 +103,21 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
-    public List<ListCategoryDto> getAllGroupByParentId() {
+    public List<?> getAllGroupByParentId() {
        List<Category> categories = categoryRepository.findAllSortByName();
-        return categories.stream()
+         categories.stream()
                .filter(category -> category.getParentId() == 0)
                .map(category -> {
                     List<Category> subCategories = categories.stream()
                            .filter(subCategory -> subCategory.getParentId() == category.getId())
                            .toList();
+                   System.out.println("SubCategories for " + category.getName() + ": " + subCategories);
                     return new ListCategoryDto(category.getId(), category.getName(), category.getSlug(), subCategories, category.getCreatedAt(), category.getUpdatedAt());
                })
                .toList();
+        System.out.println("Categories: " + categories);
+
+         return categories;
     }
 
     public List<Category> getSubCategoriesByParentId(Long parentId) {
