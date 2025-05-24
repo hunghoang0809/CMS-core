@@ -116,7 +116,7 @@ public class CsvService {
 
     }
 
-    @Transactional
+
     public void importProductCsv(MultipartFile file) throws Exception {
         int BATCH_SIZE = 200;
         List<Pair<Product, CSVRecord>> batchRecords = new ArrayList<>(BATCH_SIZE);
@@ -161,8 +161,8 @@ public class CsvService {
         }
     }
 
-    // Hàm xử lý lưu và gán danh mục cho 1 batch
-    private void saveBatchWithCategories(List<Pair<Product, CSVRecord>> batch) {
+    @Transactional
+    protected void saveBatchWithCategories(List<Pair<Product, CSVRecord>> batch) {
         // Lưu sản phẩm
         List<Product> savedProducts = productRepository.saveAll(
                 batch.stream().map(Pair::getLeft).toList()
