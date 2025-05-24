@@ -37,8 +37,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -127,12 +126,16 @@ public class CsvService {
                 );
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         ){
-            System.out.println("Headers in CSV: " + csvParser.getHeaderMap().keySet());
+            Set<String> existingSlugs = productRepository.findAllSlug();
+            Set<String> seenSlugs = new HashSet<>();
             for (CSVRecord record : csvParser) {
                 String slug = toSlug(record.get("Name")); // "Tên" → "Name"
-                if (productRepository.existsBySlug(slug)) {
+
+                if (existingSlugs.contains(slug) || seenSlugs.contains(slug)) {
                     continue;
                 }
+
+                seenSlugs.add(slug);
 
                 Product product = new Product();
                 product.setName(record.get("Name")); // "Tên" → "Name"
@@ -176,7 +179,7 @@ public class CsvService {
         }
     }
 
-
+    private final Map<String, Category> categoryCache = new HashMap<>();
 
     @Transactional
     public void processAndAssignCategories(String categoryPath, Long productId) {
@@ -186,18 +189,22 @@ public class CsvService {
 
         for (String raw : parts) {
             String name = raw.trim();
+            String key = parentId + "_" + name; // Tạo key duy nhất dựa trên parentId + tên
 
+            Category category = categoryCache.get(key);
+            if (category == null) {
+                long finalParentId = parentId;
+                category = categoryRepository.findByNameAndParentId(name, parentId)
+                        .orElseGet(() -> {
+                            Category newCategory = new Category();
+                            newCategory.setName(name);
+                            newCategory.setSlug(toSlug(name));
+                            newCategory.setParentId(finalParentId);
+                            return categoryRepository.save(newCategory);
+                        });
 
-            long finalParentId = parentId;
-            Category category = categoryRepository
-                    .findByNameAndParentId(name, parentId)
-                    .orElseGet(() -> {
-                        Category newCategory = new Category();
-                        newCategory.setName(name);
-                        newCategory.setSlug(toSlug(name));
-                        newCategory.setParentId(finalParentId);
-                        return categoryRepository.save(newCategory);
-                    });
+                categoryCache.put(key, category);
+            }
 
             categories.add(category);
             parentId = category.getId();
@@ -213,7 +220,6 @@ public class CsvService {
             }
         }
     }
-
 
     private Long parseLong(String value) {
         try {

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p " +
@@ -40,5 +41,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     )
     Page<Product> findProductByCategoryId(Long categoryId, Pageable pageable);
+
+    @Query("Select p.slug from Product p")
+    Set<String> findAllSlug();
 
 }
