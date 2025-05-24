@@ -22,7 +22,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findBySlug(String slug);
 
-    @Query("SELECT c FROM Category c WHERE c.parentId = 0 order by c.createdAt ASC ")
+    @Query("SELECT c FROM Category c WHERE c.parentId = 0 order by c.name ASC ")
     List<Category> findAllParentCategory();
 
 

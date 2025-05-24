@@ -34,9 +34,14 @@ public class ProductController {
             @RequestParam(value = "brandSlug", required = false) String brandSlug,
             @RequestParam(value = "keyword", required = false) String keyword
             ) {
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-        return  ResponseEntity.ok(
-                new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categorySlug, brandSlug, keyword)));
+        try{
+            Pageable pageable = Pageable.ofSize(size).withPage(page);
+            return  ResponseEntity.ok(
+                    new ApiResponse<>(200, "Success", productService.getAllProduct(pageable, categorySlug, brandSlug, keyword)));
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(400, "Error: " + e.getMessage(), null));
+        }
+
     }
 
     @Operation(summary = "Get product by slug")
