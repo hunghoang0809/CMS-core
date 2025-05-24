@@ -17,6 +17,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  cache:
+    type: redis
+    redis:
+      host: 160.191.244.248
+      port: 6379
 
   security:
     enabled: true
