@@ -89,13 +89,4 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> usernameOrPasswordInvalidException(WrongCredentialsException exception) {
         return new ResponseEntity<>(new ApiResponse<>(401, "Tài khoản hoặc mật khẩu không đúng", null), HttpStatus.UNAUTHORIZED);
     }
-
-    @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<?> expiredTokenException(TokenExpiredException exception) {
-        return new ResponseEntity<>(new ApiResponse<>(401, "Token đã hết hạn", null), HttpStatus.UNAUTHORIZED);
-    }
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<?> ioException(IOException exception) {
-        return new ResponseEntity<>(new ApiResponse<>(500, exception.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }
