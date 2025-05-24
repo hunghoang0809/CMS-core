@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "category_page")
+@Table(name = "page_category")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
