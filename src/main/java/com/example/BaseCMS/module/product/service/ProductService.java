@@ -164,6 +164,10 @@ public class ProductService  {
     public Page<ProductDto> getAllProduct(Pageable pageable, String categorySlug, String brandSlug, String keyword) {
         Long categoryId = null;
         Long brandId = null;
+        boolean noFilter = categorySlug == null && brandSlug == null && (keyword == null || keyword.isBlank());
+        if (noFilter) {
+            return productRepository.findAll(pageable).map(this::convertToDto);
+        }
         if (categorySlug != null) {
             Category category = categoryRepository.findBySlug(categorySlug).orElseThrow(() -> new GenericErrorException("Không tìm thấy danh mục với slug " + categorySlug, HttpStatus.NOT_FOUND));
             categoryId = category.getId();
