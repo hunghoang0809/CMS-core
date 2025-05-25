@@ -10,9 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT DISTINCT p FROM Product p " +
-            "INNER JOIN CategoryProduct cp on cp.productId = p.id "+
-            "WHERE (:categoryId IS NULL OR cp.categoryId = :categoryId) " )
+    @Query("""
+    SELECT p FROM Product p
+    WHERE (:categoryId IS NULL OR EXISTS (
+        SELECT 1 FROM CategoryProduct cp
+        WHERE cp.productId = p.id AND cp.categoryId = :categoryId
+    ))
+""")
     Page<Product> findAllProduct( Long categoryId, Pageable pageable);
 
     Product findBySlug(String slug);
